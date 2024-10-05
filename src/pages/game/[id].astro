@@ -1,0 +1,57 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+    const games = await getCollection("games");
+
+    return games.map((game: any) => {
+        return {
+            params: { id: game.slug },
+            props: { game },
+        };
+    });
+}
+
+const game = Astro.props.game;
+const { data, body } = game;
+const { title, img } = data;
+---
+
+
+<Layout title=`${title}`>
+    <div>
+        <a href="/">Volver</a>
+        <section>
+            <img src={`/${img}`} alt={title} />
+            <div>
+                <h1>{title}</h1>
+                <p>{body}</p>
+            </div>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    div {
+        max-width: 800px;
+        margin: auto;
+        padding: 1rem;
+
+        a {
+            color: #fff;
+        }
+
+        section {
+            display: flex;
+            padding: 2rem .5rem .5rem .5rem;
+
+            img {
+                border-radius: 1rem;
+            }
+            div {
+                padding-left: 2rem;
+            }
+        }
+    }
+</style>
